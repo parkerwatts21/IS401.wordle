@@ -1,7 +1,5 @@
 # Parker Watts, Aiki Takaku, Donna Kim, Mac Hartsell
-# Description : Write a python program 
-# Overall GPA, Last 30 Credits GPA, Accounting 200 Grade, IS 201 Grade, IS 303 Grade, Essay score between 0 and 4 
-# Convert these variables into correct values, calculate Total Applying GPA, and then display Total Applying GPA with correlating message
+# Description : Write a python program that simulates the game wordle
 
 # File: Wordle.py
 
