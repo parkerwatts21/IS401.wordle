@@ -19,8 +19,10 @@ def wordle(sWordOfTheDay):
         
         if user_guess == sWordOfTheDay.upper():
             gw.show_message("Congratulations! You guessed the entire word!")
+        elif user_guess.lower() in FIVE_LETTER_WORDS:
+            gw.show_message("This is in the word list, but not correct.")
         else:
-            gw.show_message("Not the correct word.")
+            gw.show_message("Not in word list.")
 
     gw = WordleGWindow()
     gw.add_enter_listener(enter_action)
