@@ -36,10 +36,10 @@ def wordle(sWordOfTheDay):
             sGuessedLetter = user_guess[iCount]
             sCorrectLetter = sWordOfTheDay[iCount]
 
-            if (sGuessedLetter == sCorrectLetter):
+            if (sGuessedLetter.lower() == sCorrectLetter):
                 gw.set_square_color(N_ROWS - 6, iCount, CORRECT_COLOR)
 
-            elif (sGuessedLetter == sCorrectLetterOne or sGuessedLetter == sCorrectLetterTwo or sGuessedLetter == sCorrectLetterThree or sGuessedLetter == sCorrectLetterFour or sGuessedLetter == sCorrectLetterFive):
+            elif (sGuessedLetter.lower() in [sCorrectLetterOne, sCorrectLetterTwo, sCorrectLetterThree, sCorrectLetterFour, sCorrectLetterFive]):
                 gw.set_square_color(N_ROWS - 6, iCount, PRESENT_COLOR)
 
             else :
