@@ -25,10 +25,11 @@ def wordle(sWordOfTheDay):
     gw = WordleGWindow()
     gw.add_enter_listener(enter_action)
 
-    # Putting the the word of the day using the function Set_Square_Letter and looping through each letter - (Parker) MILESTONE #1
-    for iCount in range(5):
+    """ (Parker) MILESTONE #1 - Putting the the word of the day using the function Set_Square_Letter and looping through each letter
+      for iCount in range(5):
         sLetter = sWordOfTheDay[iCount]
         gw.set_square_letter(N_ROWS - 6, iCount, sLetter)
+    """
 
 
 # Selecting a random word from the dictionary and setting variables - (Parker) MILESTONE #1 
