@@ -23,7 +23,7 @@ def wordle(sWordOfTheDay):
     # Putting the the word of the day using the function Set_Square_Letter and looping through each letter - (Parker) MILESTONE #1
     for iCount in range (0, 5, 1) :
         sLetter = sWordOfTheDay[iCount]
-        gw.set_square_letter(N_ROWS - 5, iCount, sLetter)
+        gw.set_square_letter(N_ROWS - 6, iCount, sLetter)
 
 
 # Selecting a random word from the dicionary and setting variables - (Parker) MILESTONE #1 
