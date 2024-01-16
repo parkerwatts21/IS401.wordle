@@ -36,6 +36,8 @@ def wordle(sWordOfTheDay, bPlayGame):
                     if (sGuessedLetter == sCorrectLetter):
                         gw.set_square_color(gw.get_current_row(), iCount, CORRECT_COLOR)
                         LetterList.remove(sCorrectLetter)
+                        # Milestone #4 Color the Correct Keys
+                        gw.set_key_color(sGuessedLetter.upper(), CORRECT_COLOR)
                 
                 # Mark the other letters that are not in the correct spot. First find yellow letter then letters that aren't in the word (Parker) MILESTONE #3
                 for iCount in range(5):
@@ -43,17 +45,26 @@ def wordle(sWordOfTheDay, bPlayGame):
                     sCorrectLetter = sWordOfTheDay[iCount]
 
                     if (sGuessedLetter in LetterList):
-                            gw.set_square_color(gw.get_current_row(), iCount, PRESENT_COLOR)
-                            LetterList.remove(sGuessedLetter)
+                        gw.set_square_color(gw.get_current_row(), iCount, PRESENT_COLOR)
+                        LetterList.remove(sGuessedLetter)
+
+                        # Milestone #4 Color the Yellow Keys
+                        if (gw.get_key_color(sGuessedLetter.upper()) != CORRECT_COLOR) and (gw.get_key_color(sGuessedLetter.upper()) != MISSING_COLOR) :
+                            gw.set_key_color(sGuessedLetter.upper(), PRESENT_COLOR)
                     elif sGuessedLetter != sCorrectLetter:
-                            gw.set_square_color(gw.get_current_row(), iCount, MISSING_COLOR)
-                if gw.get_current_row() < N_ROWS:
-                    gw.set_current_row(gw.get_current_row() + 1)
+                        gw.set_square_color(gw.get_current_row(), iCount, MISSING_COLOR)
+                        
+                        # Milestone #4 Color the Non Correct Keys
+                        if (gw.get_key_color(sGuessedLetter.upper()) != CORRECT_COLOR) and (gw.get_key_color(sGuessedLetter.upper()) != PRESENT_COLOR) :
+                            gw.set_key_color(sGuessedLetter.upper(), MISSING_COLOR)
                 
                 # If it is the correct word, display a message.
                 if user_guess == sWordOfTheDay.upper():
                     gw.show_message("Congratulations! You guessed the entire word!")
                     bPlayGame = False
+                # Elif Go down a row and let them type again
+                elif gw.get_current_row() < N_ROWS: 
+                    gw.set_current_row(gw.get_current_row() + 1)
             else:
                 gw.show_message("Not in word list.")
     gw = WordleGWindow()
