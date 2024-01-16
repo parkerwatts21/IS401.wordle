@@ -17,7 +17,7 @@ def wordle(sWordOfTheDay):
     def enter_action(s):
         user_guess = s.upper()  # Assuming s is the input string from the user
         
-        # Checks the input if it the correct word, in the word list, or not in the word list.
+        # Checks the input if it the correct word, in the word list, or not in the word list. (Parker) MILESTONE #2
         if user_guess == sWordOfTheDay.upper():
             gw.show_message("Congratulations! You guessed the entire word!")
         elif user_guess.lower() in FIVE_LETTER_WORDS:
@@ -26,24 +26,27 @@ def wordle(sWordOfTheDay):
             gw.show_message("Not in word list.")
 
         # Checks each individual letter and adds color
-        sCorrectLetterOne = sWordOfTheDay[0]
-        sCorrectLetterTwo = sWordOfTheDay[1]
-        sCorrectLetterThree = sWordOfTheDay[2]
-        sCorrectLetterFour = sWordOfTheDay[3]
-        sCorrectLetterFive = sWordOfTheDay[4]
-        
+        LetterList = [sWordOfTheDay[0], sWordOfTheDay[1], sWordOfTheDay[2], sWordOfTheDay[3], sWordOfTheDay[4]]
+
+        # Mark the correct letters first
         for iCount in range(5):
-            sGuessedLetter = user_guess[iCount]
+            sGuessedLetter = user_guess[iCount].lower()
             sCorrectLetter = sWordOfTheDay[iCount]
 
-            if (sGuessedLetter.lower() == sCorrectLetter):
+            if (sGuessedLetter == sCorrectLetter):
                 gw.set_square_color(N_ROWS - 6, iCount, CORRECT_COLOR)
+                LetterList.remove(sCorrectLetter)
+        
+        # Mark the other letters that are not in the correct spot. First find yellow letter then letters that aren't in the word
+        for iCount in range(5):
+            sGuessedLetter = user_guess[iCount].lower()
+            sCorrectLetter = sWordOfTheDay[iCount]
 
-            elif (sGuessedLetter.lower() in [sCorrectLetterOne, sCorrectLetterTwo, sCorrectLetterThree, sCorrectLetterFour, sCorrectLetterFive]):
-                gw.set_square_color(N_ROWS - 6, iCount, PRESENT_COLOR)
-
-            else :
-                 gw.set_square_color(N_ROWS - 6, iCount, MISSING_COLOR)
+            if (sGuessedLetter in LetterList):
+                    gw.set_square_color(N_ROWS - 6, iCount, PRESENT_COLOR)
+                    LetterList.remove(sGuessedLetter)
+            elif sGuessedLetter != sCorrectLetter:
+                    gw.set_square_color(N_ROWS - 6, iCount, MISSING_COLOR)
     gw = WordleGWindow()
     gw.add_enter_listener(enter_action)
 
