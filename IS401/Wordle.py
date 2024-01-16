@@ -11,42 +11,51 @@ import random
 from WordleDictionary import FIVE_LETTER_WORDS
 from WordleGraphics import WordleGWindow, N_COLS, N_ROWS, CORRECT_COLOR, PRESENT_COLOR, MISSING_COLOR
 
-def wordle(sWordOfTheDay):
-    
+# Selecting a random word from the dictionary and setting variables - (Parker) MILESTONE #1 
+iNum = random.randrange(0, len(FIVE_LETTER_WORDS) + 1)  # Corrected range
+sWordOfTheDay = FIVE_LETTER_WORDS[iNum]
+bPlayGame = True
+
+def wordle(sWordOfTheDay, bPlayGame):
     # Make a function to see if the user input is the same word - (Aiki) MILESTONE #2
     def enter_action(s):
+        nonlocal bPlayGame
         user_guess = s.upper()  # Assuming s is the input string from the user
-        
-        # Checks the input if it the correct word, in the word list, or not in the word list. (Parker) MILESTONE #2
-        if user_guess == sWordOfTheDay.upper():
-            gw.show_message("Congratulations! You guessed the entire word!")
-        elif user_guess.lower() in FIVE_LETTER_WORDS:
-            gw.show_message("This is in the word list, but not correct.")
-        else:
-            gw.show_message("Not in word list.")
+        if bPlayGame == True:
+            # In the word list, or not in the word list. (Aiki) MILESTONE #2
+            if user_guess.lower() in FIVE_LETTER_WORDS:
 
-        # Checks each individual letter and adds color
-        LetterList = [sWordOfTheDay[0], sWordOfTheDay[1], sWordOfTheDay[2], sWordOfTheDay[3], sWordOfTheDay[4]]
+                # Checks each individual letter and adds color (Parker) MILESTONE #3
+                LetterList = [sWordOfTheDay[0], sWordOfTheDay[1], sWordOfTheDay[2], sWordOfTheDay[3], sWordOfTheDay[4]]
 
-        # Mark the correct letters first
-        for iCount in range(5):
-            sGuessedLetter = user_guess[iCount].lower()
-            sCorrectLetter = sWordOfTheDay[iCount]
+                # Mark the correct letters first (Parker) MILESTONE #3
+                for iCount in range(5):
+                    sGuessedLetter = user_guess[iCount].lower()
+                    sCorrectLetter = sWordOfTheDay[iCount]
 
-            if (sGuessedLetter == sCorrectLetter):
-                gw.set_square_color(N_ROWS - 6, iCount, CORRECT_COLOR)
-                LetterList.remove(sCorrectLetter)
-        
-        # Mark the other letters that are not in the correct spot. First find yellow letter then letters that aren't in the word
-        for iCount in range(5):
-            sGuessedLetter = user_guess[iCount].lower()
-            sCorrectLetter = sWordOfTheDay[iCount]
+                    if (sGuessedLetter == sCorrectLetter):
+                        gw.set_square_color(gw.get_current_row(), iCount, CORRECT_COLOR)
+                        LetterList.remove(sCorrectLetter)
+                
+                # Mark the other letters that are not in the correct spot. First find yellow letter then letters that aren't in the word (Parker) MILESTONE #3
+                for iCount in range(5):
+                    sGuessedLetter = user_guess[iCount].lower()
+                    sCorrectLetter = sWordOfTheDay[iCount]
 
-            if (sGuessedLetter in LetterList):
-                    gw.set_square_color(N_ROWS - 6, iCount, PRESENT_COLOR)
-                    LetterList.remove(sGuessedLetter)
-            elif sGuessedLetter != sCorrectLetter:
-                    gw.set_square_color(N_ROWS - 6, iCount, MISSING_COLOR)
+                    if (sGuessedLetter in LetterList):
+                            gw.set_square_color(gw.get_current_row(), iCount, PRESENT_COLOR)
+                            LetterList.remove(sGuessedLetter)
+                    elif sGuessedLetter != sCorrectLetter:
+                            gw.set_square_color(gw.get_current_row(), iCount, MISSING_COLOR)
+                if gw.get_current_row() < N_ROWS:
+                    gw.set_current_row(gw.get_current_row() + 1)
+                
+                # If it is the correct word, display a message.
+                if user_guess == sWordOfTheDay.upper():
+                    gw.show_message("Congratulations! You guessed the entire word!")
+                    bPlayGame = False
+            else:
+                gw.show_message("Not in word list.")
     gw = WordleGWindow()
     gw.add_enter_listener(enter_action)
 
@@ -56,14 +65,9 @@ def wordle(sWordOfTheDay):
         gw.set_square_letter(N_ROWS - 6, iCount, sLetter)
     """
 
-
-# Selecting a random word from the dictionary and setting variables - (Parker) MILESTONE #1 
-iNum = random.randrange(0, len(FIVE_LETTER_WORDS) + 1)  # Corrected range
-sWordOfTheDay = FIVE_LETTER_WORDS[iNum]
-
 # Startup code
 if __name__ == "__main__":
-    wordle(sWordOfTheDay)
+    wordle(sWordOfTheDay, bPlayGame)
 
 # Testing to see what the random word is by printing - (Parker) MILESTONE #1
 print(iNum)
