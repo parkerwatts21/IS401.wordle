@@ -12,38 +12,52 @@ from WordleDictionary import FIVE_LETTER_WORDS
 from WordleGraphics import WordleGWindow, N_COLS, N_ROWS, CORRECT_COLOR, PRESENT_COLOR, MISSING_COLOR
 
 def wordle(sWordOfTheDay):
-    
+    current_row = 6
+    attempt_times = 0
+
     # Make a function to see if the user input is the same word - (Aiki) MILESTONE #2
     def enter_action(s):
+        nonlocal current_row, attempt_times
         user_guess = s.upper()  # Assuming s is the input string from the user
-        
-        # Checks the input if it the correct word, in the word list, or not in the word list.
-        if user_guess == sWordOfTheDay.upper():
-            gw.show_message("Congratulations! You guessed the entire word!")
-        elif user_guess.lower() in FIVE_LETTER_WORDS:
-            gw.show_message("This is in the word list, but not correct.")
-        else:
-            gw.show_message("Not in word list.")
 
-        # Checks each individual letter and adds color
-        sCorrectLetterOne = sWordOfTheDay[0]
-        sCorrectLetterTwo = sWordOfTheDay[1]
-        sCorrectLetterThree = sWordOfTheDay[2]
-        sCorrectLetterFour = sWordOfTheDay[3]
-        sCorrectLetterFive = sWordOfTheDay[4]
-        
-        for iCount in range(5):
-            sGuessedLetter = user_guess[iCount]
-            sCorrectLetter = sWordOfTheDay[iCount]
+        while (user_guess != sWordOfTheDay):    
+            user_guess = user_guess.upper() 
 
-            if (sGuessedLetter.lower() == sCorrectLetter):
-                gw.set_square_color(N_ROWS - 6, iCount, CORRECT_COLOR)
+            # Checks each individual letter and adds color
+            sCorrectLetterOne = sWordOfTheDay[0]
+            sCorrectLetterTwo = sWordOfTheDay[1]
+            sCorrectLetterThree = sWordOfTheDay[2]
+            sCorrectLetterFour = sWordOfTheDay[3]
+            sCorrectLetterFive = sWordOfTheDay[4]
 
-            elif (sGuessedLetter.lower() in [sCorrectLetterOne, sCorrectLetterTwo, sCorrectLetterThree, sCorrectLetterFour, sCorrectLetterFive]):
-                gw.set_square_color(N_ROWS - 6, iCount, PRESENT_COLOR)
+            for iCount in range(5):
+                sGuessedLetter = user_guess[iCount]
+                sCorrectLetter = sWordOfTheDay[iCount]
 
-            else :
-                 gw.set_square_color(N_ROWS - 6, iCount, MISSING_COLOR)
+                if (sGuessedLetter.lower() == sCorrectLetter):
+                    gw.set_square_color(N_ROWS - current_row, iCount, CORRECT_COLOR)
+
+                elif (sGuessedLetter.lower() in [sCorrectLetterOne, sCorrectLetterTwo, sCorrectLetterThree, sCorrectLetterFour, sCorrectLetterFive]):
+                    gw.set_square_color(N_ROWS - current_row, iCount, PRESENT_COLOR)
+
+                else :
+                    gw.set_square_color(N_ROWS - current_row, iCount, MISSING_COLOR)
+            
+            # Checks the input if it the correct word, in the word list, or not in the word list.
+            if user_guess == sWordOfTheDay.upper():
+                gw.show_message("Congratulations! You guessed the entire word!")
+            elif user_guess.lower() in FIVE_LETTER_WORDS:
+                gw.show_message("This is in the word list, but not correct.")
+            else:
+                gw.show_message("Not in word list.")
+
+            current_row -= 1
+            attempt_times += 1
+            gw.set_current_row(attempt_times)
+
+            # Read the next guess using get_square_letter
+            user_guess = ""
+    
     gw = WordleGWindow()
     gw.add_enter_listener(enter_action)
 
