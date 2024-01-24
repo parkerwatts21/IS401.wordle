@@ -44,7 +44,7 @@ KEY_YSEP = 7
 KEY_LABELS = [
     [ "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P" ],
     [ "A", "S", "D", "F", "G", "H", "J", "K", "L" ],
-    [ "ENTER", "Z", "X", "C", "V", "B", "N", "M", "DELETE" ]
+    [ "ENTER", "Z", "X", "C", "V", "B", "N", "M", "DELETE"]
 ]
 
 CLICK_MAX_DISTANCE = 2
@@ -98,15 +98,20 @@ class WordleGWindow:
         def key_action(tke):
             if isinstance(tke, str):
                 ch = tke.upper()
+            elif tke.keysym == "BackSpace":
+                ch = "BackSpace" 
+            elif tke.keysym == "Return":
+                ch = "Return"
             else:
                 ch = tke.char.upper()
-            if ch == "\007" or ch == "\177" or ch == "DELETE":
+                print(ch)
+            if ch == "\007" or ch == "\177" or ch == "DELETE" or ch == "BackSpace":
                 self.show_message("")
                 if self._row < N_ROWS and self._col > 0:
                     self._col -= 1
                     sq = self._grid[self._row][self._col]
                     sq.set_letter(" ")
-            elif ch == "\r" or ch == "\n" or ch == "ENTER":
+            elif ch == "\r" or ch == "\n" or ch == "ENTER" or ch == "Return":
                 self.show_message("")
                 s = ""
                 for col in range(N_COLS):
