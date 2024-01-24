@@ -98,7 +98,7 @@ class WordleGWindow:
         def key_action(tke):
             if isinstance(tke, str):
                 ch = tke.upper()
-            elif tke.keysym == "BackSpace":
+            elif tke.keysym == "BackSpace": #Added the Backspace and Return for the mac
                 ch = "BackSpace" 
             elif tke.keysym == "Return":
                 ch = "Return"
