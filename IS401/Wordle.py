@@ -10,16 +10,29 @@ I have completed Milestone 1 so far. I added comments to see where I added my co
 import random
 from WordleDictionary import FIVE_LETTER_WORDS
 from WordleGraphics import WordleGWindow, N_COLS, N_ROWS, CORRECT_COLOR, PRESENT_COLOR, MISSING_COLOR
+from tkinter import messagebox
+
+
 
 # Selecting a random word from the dictionary and setting variables - (Parker) MILESTONE #1 
 iNum = random.randrange(0, len(FIVE_LETTER_WORDS) + 1)  # Corrected range
 sWordOfTheDay = FIVE_LETTER_WORDS[iNum]
 bPlayGame = True
 
+# These are default sets of variables value
+iTry = 0
+iGameCount = 0
+iWins = 0
+
 def wordle(sWordOfTheDay, bPlayGame):
     # Make a function to see if the user input is the same word - (Aiki) MILESTONE #2
     def enter_action(s):
+        #set global and nonlocal variables inside of function
+        global iWins
+        global iGameCount
+        global iTry
         nonlocal bPlayGame
+
         user_guess = s.upper()  # Assuming s is the input string from the user
         if bPlayGame == True:
             # In the word list, or not in the word list. (Aiki) MILESTONE #2
@@ -27,7 +40,7 @@ def wordle(sWordOfTheDay, bPlayGame):
 
                 # Checks each individual letter and adds color (Parker) MILESTONE #3
                 LetterList = [sWordOfTheDay[0], sWordOfTheDay[1], sWordOfTheDay[2], sWordOfTheDay[3], sWordOfTheDay[4]]
-
+                
                 # Mark the correct letters first (Parker) MILESTONE #3
                 for iCount in range(5):
                     sGuessedLetter = user_guess[iCount].lower()
@@ -60,10 +73,29 @@ def wordle(sWordOfTheDay, bPlayGame):
                 
                 # If it is the correct word, display a message.
                 if user_guess == sWordOfTheDay.upper():
+                    # add 1 to numbers of tries, wins, and game count
+                    iTry = iTry + 1
+                    iWins += 1
+                    iGameCount += 1
                     gw.show_message("Congratulations! You guessed the entire word!")
-                    bPlayGame = False
+                    #show statistics for player's wordle games
+                    messagebox.showinfo(title="Wordle", message=f"You guessed the word with {iTry} guesses. \n\n Wins: {iWins} times \n Total Game: {iGameCount} \n WinPercentage: {round(iWins/iGameCount*100, 2)}%")
+                    
+                    #ask user if they want to continue to play
+                    response = messagebox.askquestion(title="Wordle", message="Do you want to play again?")
+                    #if yes, set new words, and play again
+                    if response == 'yes':
+                        iNum = random.randrange(0, len(FIVE_LETTER_WORDS) + 1)
+                        sNextWord = FIVE_LETTER_WORDS[iNum]
+                        wordle(sNextWord, bPlayGame)
+                        # print(sNextWord)
+                        # print(iGameCount)
+                        
+                    else:
+                        bPlayGame = False
                 # Elif Go down a row and let them type again
                 elif gw.get_current_row() < N_ROWS: 
+                    iTry = iTry + 1
                     gw.set_current_row(gw.get_current_row() + 1)
             else:
                 gw.show_message("Not in word list.")
