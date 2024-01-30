@@ -11,10 +11,6 @@ import random
 from WordleDictionary import FIVE_LETTER_WORDS
 from WordleGraphics import WordleGWindow, N_COLS, N_ROWS, CORRECT_COLOR, PRESENT_COLOR, MISSING_COLOR
 from tkinter import messagebox
-import pyautogui
-import webbrowser
-import urllib.parse
-import os
 import pyperclip
 
 
