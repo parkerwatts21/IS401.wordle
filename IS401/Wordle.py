@@ -11,6 +11,7 @@ import random
 from WordleDictionary import FIVE_LETTER_WORDS
 from WordleGraphics import WordleGWindow, N_COLS, N_ROWS, CORRECT_COLOR, PRESENT_COLOR, MISSING_COLOR, UNKNOWN_COLOR, KEY_COLOR
 from tkinter import messagebox
+import emoji # need to import pip install emoji
 
 # Selecting a random word from the dictionary and setting variables - (Parker) MILESTONE #1 
 iNum = random.randrange(0, len(FIVE_LETTER_WORDS) + 1)  # Corrected range
@@ -22,6 +23,14 @@ iTry = 0
 iGameCount = 0
 iWins = 0
 
+# Setting up result emojis
+GREENBOX = (emoji.emojize(':green_square:'))
+YELLOWBOX = (emoji.emojize(':yellow_square:'))
+GREYBOX = (emoji.emojize(':white_large_square:'))
+
+results = ""
+resultList = ['X','X','X','X','X']
+
 def wordle(sWordOfTheDay, bPlayGame):
     # Make a function to see if the user input is the same word - (Aiki) MILESTONE #2
     def enter_action(s):
@@ -31,6 +40,8 @@ def wordle(sWordOfTheDay, bPlayGame):
         global iTry
         global sWordOfTheDay
         global bPlayGame
+        global results
+        global resultList
 
         user_guess = s.upper()  # Set String to uppercase
 
@@ -51,6 +62,9 @@ def wordle(sWordOfTheDay, bPlayGame):
                         LetterList.remove(sCorrectLetter)
                         # Milestone #4 Color the Correct Keys
                         gw.set_key_color(sGuessedLetter.upper(), CORRECT_COLOR)
+
+                        #Emoji Results for green squares
+                        resultList[iCount] = "G"
                 
                 # Mark the other letters that are not in the correct spot. First find yellow letter then letters that aren't in the word (Parker) MILESTONE #3
                 for iCount in range(5):
@@ -60,16 +74,33 @@ def wordle(sWordOfTheDay, bPlayGame):
                     if (sGuessedLetter in LetterList):
                         gw.set_square_color(gw.get_current_row(), iCount, PRESENT_COLOR)
                         LetterList.remove(sGuessedLetter)
+                        
+                        #Emoji Results for yellow squares
+                        resultList[iCount] = "Y"
 
                         # Milestone #4 Color the Yellow Keys
                         if (gw.get_key_color(sGuessedLetter.upper()) != CORRECT_COLOR) and (gw.get_key_color(sGuessedLetter.upper()) != MISSING_COLOR) :
                             gw.set_key_color(sGuessedLetter.upper(), PRESENT_COLOR)
+                    
                     elif sGuessedLetter != sCorrectLetter:
                         gw.set_square_color(gw.get_current_row(), iCount, MISSING_COLOR)
                         
                         # Milestone #4 Color the Non Correct Keys
                         if (gw.get_key_color(sGuessedLetter.upper()) != CORRECT_COLOR) and (gw.get_key_color(sGuessedLetter.upper()) != PRESENT_COLOR) :
                             gw.set_key_color(sGuessedLetter.upper(), MISSING_COLOR)
+                
+                # Add Emojis to results
+                for iEmojiCount in range(5):
+                    if resultList[iEmojiCount] == "G":
+                        results += GREENBOX
+                        
+                    elif resultList[iEmojiCount] == "Y":
+                        results += YELLOWBOX
+
+                    elif resultList[iEmojiCount] == "X":
+                        results += GREYBOX
+                
+                resultList = ['X','X','X','X','X']
                 
                 # If it is the correct word, display a message.
                 if user_guess == sWordOfTheDay.upper():
@@ -87,6 +118,7 @@ def wordle(sWordOfTheDay, bPlayGame):
                     iTry = iTry + 1
                     if gw.get_current_row() < N_ROWS - 1:
                         gw.set_current_row(gw.get_current_row() + 1)
+                        results += '\n'
                     else: # Once the user reaches the max row count. End the game
                         iGameCount += 1
                         gw.show_message(f"Game over! The word was {sWordOfTheDay}.")
@@ -100,6 +132,7 @@ def wordle(sWordOfTheDay, bPlayGame):
     #Restart the Game
     def resetGame():
         global iTry
+        global results
         # Set Rows Back to White
         for row in range(N_ROWS):
             for col in range(N_COLS):
@@ -112,17 +145,19 @@ def wordle(sWordOfTheDay, bPlayGame):
         gw.set_current_row(0)
         gw.show_message(" ")
         iTry = 0
+        results = ""
     
     #Statistics Message Box Displayed AIKI 
     def showMessageBox(bWon):
         global bPlayGame
         global sWordOfTheDay
-        
+        global results
+
         #Show statistics for player's wordle games. Display different messages depending if they won or not
         if bWon == True: 
-            messagebox.showinfo(title="Wordle", message=f"Congrats! You guessed the word with {iTry} guesses. \n\n Wins: {iWins} time(s) \n Total Games: {iGameCount} \n WinPercentage: {round(iWins/iGameCount*100, 2)}%")
+            messagebox.showinfo(title="Wordle", message=f"Congrats! You guessed the word with {iTry} guesses. \n\n Wins: {iWins} time(s) \n Total Games: {iGameCount} \n WinPercentage: {round(iWins/iGameCount*100, 2)}% \n\nResults: \n{results}")
         else:
-            messagebox.showinfo(title="Wordle", message=f"Sorry! You weren't able to guess the word. \n\n Wins: {iWins} time(s) \n Total Games: {iGameCount} \n WinPercentage: {round(iWins/iGameCount*100, 2)}%")
+            messagebox.showinfo(title="Wordle", message=f"Sorry! You weren't able to guess the word. \n\n Wins: {iWins} time(s) \n Total Games: {iGameCount} \n WinPercentage: {round(iWins/iGameCount*100, 2)}% \n\nResults: \n {results}")
 
         #Ask user if they want to continue to play
         response = messagebox.askquestion(title="Wordle", message="Do you want to play again?")
