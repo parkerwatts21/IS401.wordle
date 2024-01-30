@@ -104,7 +104,6 @@ class WordleGWindow:
                 ch = "Return"
             else:
                 ch = tke.char.upper()
-                print(ch)
             if ch == "\007" or ch == "\177" or ch == "DELETE" or ch == "BackSpace":
                 self.show_message("")
                 if self._row < N_ROWS and self._col > 0:
@@ -241,7 +240,7 @@ class WordleSquare:
         color = color.upper()
         self._color = color
         fg = "White"
-        if color == UNKNOWN_COLOR:
+        if color == UNKNOWN_COLOR or color == KEY_COLOR:
             fg = "Black"
         self._canvas.itemconfig(self._frame, fill=color)
         self._canvas.itemconfig(self._text, fill=fg)
@@ -294,7 +293,7 @@ class WordleKey:
     def set_color(self, color):
         self._color = color
         fg = "White"
-        if color == UNKNOWN_COLOR:
+        if color == UNKNOWN_COLOR or color == KEY_COLOR:
             fg = "Black"
         self._canvas.itemconfig(self._frame, fill=color)
         self._canvas.itemconfig(self._text, fill=fg)
