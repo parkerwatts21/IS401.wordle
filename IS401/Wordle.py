@@ -155,9 +155,9 @@ def wordle(sWordOfTheDay, bPlayGame):
 
         #Show statistics for player's wordle games. Display different messages depending if they won or not
         if bWon == True: 
-            messagebox.showinfo(title="Wordle", message=f"Congrats! You guessed the word with {iTry} guesses. \n\n Wins: {iWins} time(s) \n Total Games: {iGameCount} \n WinPercentage: {round(iWins/iGameCount*100, 2)}% \n\nResults: \n{results}")
+            messagebox.showinfo(title="Wordle", message=f"Congrats! You guessed the word with {iTry} guesses. \n\n Wins: {iWins} time(s) \n Total Games: {iGameCount} \n WinPercentage: {round(iWins/iGameCount*100, 2)}% \n\nResults: {iTry}/6 \n{results}")
         else:
-            messagebox.showinfo(title="Wordle", message=f"Sorry! You weren't able to guess the word. \n\n Wins: {iWins} time(s) \n Total Games: {iGameCount} \n WinPercentage: {round(iWins/iGameCount*100, 2)}% \n\nResults: \n {results}")
+            messagebox.showinfo(title="Wordle", message=f"Sorry! You weren't able to guess the word. \n\n Wins: {iWins} time(s) \n Total Games: {iGameCount} \n WinPercentage: {round(iWins/iGameCount*100, 2)}% \n\nResults: X/6 \n {results}")
 
         #Ask user if they want to continue to play
         response = messagebox.askquestion(title="Wordle", message="Do you want to play again?")
