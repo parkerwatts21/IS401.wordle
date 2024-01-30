@@ -11,6 +11,13 @@ import random
 from WordleDictionary import FIVE_LETTER_WORDS
 from WordleGraphics import WordleGWindow, N_COLS, N_ROWS, CORRECT_COLOR, PRESENT_COLOR, MISSING_COLOR
 from tkinter import messagebox
+import pyautogui
+import webbrowser
+import urllib.parse
+import os
+import pyperclip
+
+
 
 
 
@@ -79,8 +86,11 @@ def wordle(sWordOfTheDay, bPlayGame):
                     iGameCount += 1
                     gw.show_message("Congratulations! You guessed the entire word!")
                     #show statistics for player's wordle games
-                    messagebox.showinfo(title="Wordle", message=f"You guessed the word with {iTry} guesses. \n\n Wins: {iWins} times \n Total Game: {iGameCount} \n WinPercentage: {round(iWins/iGameCount*100, 2)}%")
-                    
+                    stats_message=f"Here is a stats. \n\n Wins: {iWins} times \n Total Game: {iGameCount} \n WinPercentage: {round(iWins/iGameCount*100, 2)}%"
+                    messagebox.showinfo(title="Wordle", message=stats_message)
+
+                    #reset iTry
+                    iTry = 0
                     #ask user if they want to continue to play
                     response = messagebox.askquestion(title="Wordle", message="Do you want to play again?")
                     #if yes, set new words, and play again
@@ -90,13 +100,38 @@ def wordle(sWordOfTheDay, bPlayGame):
                         wordle(sNextWord, bPlayGame)
                         # print(sNextWord)
                         # print(iGameCount)
-                        
-                    else:
-                        bPlayGame = False
+                    elif response == 'no':
+                        response = messagebox.askquestion(title='Screenshot', message="Do you want to copy your stats?", icon='question', type='yesnocancel')
+                        if response == 'yes':
+                            pyperclip.copy(stats_message)
+                            messagebox.showinfo(title='Copy', message='successfully copied')
+                            # # Take a screenshot of the entire screen
+                            # screenshot = pyautogui.screenshot()
+
+                            # # Save the screenshot to a file
+                            # screenshot.save("screenshot.png")
+
+
                 # Elif Go down a row and let them type again
-                elif gw.get_current_row() < N_ROWS: 
+                elif gw.get_current_row() < N_ROWS and iTry < 5: 
                     iTry = iTry + 1
                     gw.set_current_row(gw.get_current_row() + 1)
+                elif iTry >= 5:
+                    #reset iTry
+                    iTry = 0
+                    iGameCount += 1
+                    gw.show_message("Congratulations! You guessed the entire word!")
+                    #show statistics for player's wordle games
+                    messagebox.showinfo(title="Wordle", message=f"You guessed the word with {iTry} guesses. \n\n Wins: {iWins} times \n Total Game: {iGameCount} \n WinPercentage: {round(iWins/iGameCount*100, 2)}%")
+                    
+                    response = messagebox.askquestion(title="Wordle", message="Do you want to play again?")
+                    #if yes, set new words, and play again
+                    if response == 'yes':
+                        iNum = random.randrange(0, len(FIVE_LETTER_WORDS) + 1)
+                        sNextWord = FIVE_LETTER_WORDS[iNum]
+                        wordle(sNextWord, bPlayGame)
+                        # print(sNextWord)
+                        # print(iGameCount)
             else:
                 gw.show_message("Not in word list.")
     gw = WordleGWindow()
